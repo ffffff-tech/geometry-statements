@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="center">
+    <div class="result-box">
+        <h2>{{ lang.result_title }}</h2>
+        
+        <p>{{ lang.result_message.format(correct_answers, total_questions) }}</p>
+        <p>{{ lang.result_grade.format(grade) }}</p>
+        
+        <!-- Таблица с результатами -->
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>{{ lang.question }}</th>
+                        <th>{{ lang.your_answer }}</th>
+                        <th>{{ lang.correct_answer }}</th>
+                        <th>{{ lang.result }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(total_questions) %}
+                    <tr>
+                        <td>{{ i+1 }}</td>
+                        <td>{{ questions[i][0] }}</td>
+                        <td>{{ user_answers[i] }}</td>
+                        <td>{{ questions[i][1] }}</td>
+                        <td>
+                            {% if user_answers[i] == questions[i][1] %}
+                            <span style="color: green;">✓</span>
+                            {% else %}
+                            <span style="color: red;">✗</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Кнопка "Выход" удалена -->
+    </div>
+</div>
+{% endblock %}

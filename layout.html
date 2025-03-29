@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ lang.title }}</title>
+    <!-- Мета-теги для лучшей интеграции с Miro -->
+    <meta property="og:title" content="Высказывания">
+    <meta property="og:description" content="Тест по геометрии">
+    <meta property="og:type" content="website">
+    
+    <!-- Добавление JSON-LD схемы для корректного отображения в Miro -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Высказывания",
+      "description": "Тест по геометрии",
+      "applicationCategory": "Education"
+    }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #020024;
+            background-image: 
+                linear-gradient(125deg, #020024 0%, #090979 35%, #00d4ff 100%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23FFFFFF' stroke-opacity='0.1'%3E%3Ccircle cx='400' cy='400' r='180'/%3E%3Ccircle cx='400' cy='400' r='200'/%3E%3Ccircle cx='400' cy='400' r='220'/%3E%3Ccircle cx='400' cy='400' r='250'/%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+            color: #e1e1ff;
+            position: relative;
+        }
+        
+        /* Звезды на фоне */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(white, rgba(255, 255, 255, 0) 2px),
+                radial-gradient(white, rgba(255, 255, 255, 0) 1px);
+            background-size: 100px 100px, 50px 50px;
+            background-position: 0 0, 25px 25px;
+            opacity: 0.15;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 25px;
+            flex: 1;
+            background: linear-gradient(135deg, rgba(10, 10, 40, 0.8), rgba(30, 30, 80, 0.8));
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 30px rgba(0, 195, 255, 0.2);
+            border-radius: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(100, 150, 255, 0.2);
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+        }
+        
+        .language-button {
+            background: linear-gradient(90deg, #3023AE 0%, #53A0FD 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(84, 84, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .language-button:hover {
+            box-shadow: 0 0 20px rgba(120, 120, 255, 0.7);
+            transform: translateY(-2px);
+        }
+        
+        .title {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 183, 255, 0.7);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 8px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #1e5799 0%, #2989d8 50%, #207cca 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+        }
+        
+        .center {
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .question-box {
+            border: 1px solid rgba(86, 133, 255, 0.3);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8));
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        /* Стили для question-number и question-text в космическом стиле */
+        .question-number {
+            font-size: 15px;
+            color: #7f9cf5;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 8px rgba(0, 132, 255, 0.5);
+        }
+        .question-text {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(111, 168, 220, 0.6);
+            line-height: 1.5;
+        }
+        .answer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        /* Стили для таблицы результатов в космическом стиле */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 1rem;
+            color: #e1e1ff;
+            background: linear-gradient(45deg, #0d1337, #1a1a4a);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(32, 0, 255, 0.2), 0 0 40px rgba(0, 69, 158, 0.1);
+            overflow: hidden;
+        }
+        .table th, .table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(138, 180, 248, 0.2);
+            text-align: center;
+        }
+        .table thead th {
+            vertical-align: bottom;
+            background: linear-gradient(90deg, #1e0056, #4900c1);
+            color: #ffffff;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #7161ef;
+            text-shadow: 0 0 5px rgba(90, 140, 250, 0.8);
+        }
+        .table tbody tr {
+            transition: background-color 0.3s;
+        }
+        .table-bordered {
+            border: 2px solid #4e4eff;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(59, 37, 119, 0.4);
+        }
+        .table-striped tbody tr:nth-of-type(even) {
+            background-color: rgba(43, 26, 88, 0.2);
+        }
+        .table tbody tr:hover {
+            background-color: rgba(76, 61, 175, 0.5);
+        }
+        .mt-4 {
+            margin-top: 20px;
+        }
+        
+        /* Звездочки для фона */
+        .result-box {
+            position: relative;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+        .result-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(white, rgba(255, 255, 255, 0) 2px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+            opacity: 0.15;
+            z-index: 1;
+        }
+        .result-box > * {
+            position: relative;
+            z-index: 2;
+        }
+        /* Стили для символов правильно/неправильно */
+        .table span[style="color: green;"] {
+            color: #39ff14 !important;
+            text-shadow: 0 0 5px #39ff14;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .table span[style="color: red;"] {
+            color: #ff4747 !important;
+            text-shadow: 0 0 5px #ff4747;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка переключения языка удалена -->
+    
+    <div class="container">
+        <h1 class="title">{{ lang.title }}</h1>
+        
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

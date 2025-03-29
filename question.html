@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="center">
+    <div class="question-box">
+        <div class="question-number">
+            {{ lang.statement_number.format(question_number, total_questions) }}
+        </div>
+        
+        <div class="question-text">
+            {{ question_text }}
+        </div>
+        
+        <form action="{{ url_for('answer') }}" method="post" class="answer-buttons">
+            <button type="submit" name="answer" value="true" class="btn btn-secondary">{{ lang.true_button }}</button>
+            <button type="submit" name="answer" value="false" class="btn btn-danger">{{ lang.false_button }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
